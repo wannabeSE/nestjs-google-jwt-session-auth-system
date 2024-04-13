@@ -12,7 +12,7 @@ async function bootstrap() {
   });
   const MongoDBSessionStore = connectMongoDBSessionStore(session);
   const sessionStore = new MongoDBSessionStore({
-    uri: 'mongodb+srv://jsamir724:jauthpass1@jauth-cluster-0.pimeayh.mongodb.net/',
+    uri: process.env.MONGODB_URL,
     collection: 'sessions',
     expires: 60000,
   });
@@ -21,7 +21,7 @@ async function bootstrap() {
   });
   app.use(
     session({
-      secret: 'mysecret!@',
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookies: {
@@ -32,6 +32,7 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(3000);
+  await app.listen(3000, () => console.log('Listening to port 3000')
+  );
 }
 bootstrap();
