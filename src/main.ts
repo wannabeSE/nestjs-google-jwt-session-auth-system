@@ -27,12 +27,11 @@ async function bootstrap() {
       cookies: {
         maxAge: 60000,
       },
-      store: sessionStore
+      store: sessionStore,
     }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(3000, () => console.log('Listening to port 3000')
-  );
+  await app.listen(3000, () => console.log('Listening to port 3000'));
 }
 bootstrap();
