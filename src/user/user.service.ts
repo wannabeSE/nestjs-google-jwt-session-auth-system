@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
-  async createUser(user) {
+  async createUser(user: User) {
     user.password = bcrypt.hashSync(user.password, 10);
     const newUser = await this.userModel.create(user);
     return {

@@ -5,7 +5,10 @@ import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env'
+    }),
     AuthModule,
     UserModule,
     MongooseModule.forRoot(process.env.MONGODB_URL),

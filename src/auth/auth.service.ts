@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { UserDetails } from 'src/types/UserDetails';
+import { User } from 'src/types/User';
 
 @Injectable()
 export class AuthService {
@@ -10,15 +11,15 @@ export class AuthService {
     private jwtService: JwtService,
     private userService: UserService,
   ) {}
-  async validateGoogleAccountHolder(userDetails) {
-    const user = await this.userService.findOne(userDetails.email);
+  async validateGoogleAccountHolder(gUserDetails: User) {
+    const user = await this.userService.findOne(gUserDetails.email);
     if (user) {
       return {
         userId: user.id,
         email: user.email,
       };
     }
-    const newUser = await this.userService.createUser(userDetails);
+    const newUser = await this.userService.createUser(gUserDetails);
     return newUser;
   }
   async validateUser(credentials: UserDetails) {
@@ -33,8 +34,6 @@ export class AuthService {
   }
   async login(credentials: UserDetails) {
     const user = await this.validateUser(credentials);
-    console.log(user);
-
     if (user) {
       const access_token = this.accessTokenGenerator(user);
       const refresh_token = this.refreshTokenGenerator(user);

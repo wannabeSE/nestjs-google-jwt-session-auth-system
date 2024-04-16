@@ -9,6 +9,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './utils/SessionSerializer';
 import { UserModule } from 'src/user/user.module';
 import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh-token.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,11 +17,17 @@ import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh-token.strategy
     PassportModule.register({
       session: true,
     }),
-    JwtModule.register({
-      secret: 'JWTSECRETAUTH@!',
-      signOptions: {
-        expiresIn: '60s',
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          secret: configService.get('JWT_SECRET'),
+          signOptions: {
+            expiresIn: '1h',
+          },
+        };
       },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],

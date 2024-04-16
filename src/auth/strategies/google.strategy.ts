@@ -17,15 +17,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     refresh_token: string,
     profile: Profile,
   ) {
-    console.log('goo val');
     const user = await this.authService.validateGoogleAccountHolder({
-      username:
-        profile.displayName.replace(/\s/g, '').toLowerCase() + profile.id,
+      username: profile.displayName.replace(/\s/g, '').toLowerCase() + profile.id,
       email: profile.emails[0].value,
       password: 'google',
     });
-    console.log('google val->', user);
-
     return user || null;
   }
 }
