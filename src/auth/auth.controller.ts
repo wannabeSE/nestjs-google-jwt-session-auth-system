@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Post,
-  Request,
+  Req,
   UseGuards,
   Res,
 } from '@nestjs/common';
@@ -12,7 +12,7 @@ import { GoogleAuthGuard } from './guards/google.guard';
 import { LocalSessionAuthGuard } from './guards/session.guard';
 import { RefreshTokenAuthGuard } from './guards/jwt-refresh.guard';
 import { UserDetails } from 'src/types/UserDetails';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { JwtAuthGuard } from './guards/jwt.guard';
 @Controller('auth')
 export class AuthController {
@@ -23,12 +23,12 @@ export class AuthController {
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
-  async googleLoginRedirect(@Request() req) {
-    return await req.user;
+  googleLoginRedirect(@Req() req: Request) {
+    return req.user;
   }
   @Get('session/profile')
   async getCurrentUserBySession(
-    @Request() req,
+    @Req() req,
     @Res() res: Response,
   ): Promise<Response> {
     if (req.user) {
@@ -40,16 +40,22 @@ export class AuthController {
     return res.status(404).json('no user found');
   }
   @UseGuards(LocalSessionAuthGuard)
-  @Post('login/session')
-  async sessionControl(@Request() req) {
-    return await req.user;
+  @Post('session/login')
+  async sessionControl(@Req() req: Request) {
+    return req.user;
+  }
+  @Get('session/logout')
+  sessionLogout(@Req() req: Request, @Res() res: Response){
+    req.session.destroy(() => {
+      res.status(200).json('Logged out')
+    })
   }
   @UseGuards(JwtAuthGuard)
   @Post('jwt/profile')
-  getCurrentUserByToken(@Request() req){
+  getCurrentUserByToken(@Req() req: Request){
     return req.user;
   }
-  @Post('login/jwt')
+  @Post('jwt/login')
   async login(
     @Body() credentials: UserDetails,
     @Res() res: Response,
@@ -59,9 +65,9 @@ export class AuthController {
       ? res.status(201).json(token)
       : res.status(401).json('Invalid Email or password');
   }
-  @Post('refresh-token')
+  @Post('jwt/refresh-token')
   @UseGuards(RefreshTokenAuthGuard)
-  async refreshToken(@Request() req) {
+  async refreshToken(@Req() req: Request): Promise<Record<string, string>> {
     const accessToken = this.authService.accessTokenGenerator(req.user);
     return { accessToken };
   }

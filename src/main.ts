@@ -5,6 +5,7 @@ import * as passport from 'passport';
 import * as connectMongoDBSessionStore from 'connect-mongodb-session';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1')
   app.enableCors({
     origin: true,
     allowedHeaders: 'Content-Type, Authorization',
@@ -14,7 +15,7 @@ async function bootstrap() {
   const sessionStore = new MongoDBSessionStore({
     uri: process.env.MONGODB_URL,
     collection: 'sessions',
-    expires: 60000,
+    expires: 24 * 60 * 60 * 1000, //* 1 day to milliseconds
   });
   sessionStore.on('error', () => {
     console.log('unable to connect');
@@ -24,9 +25,6 @@ async function bootstrap() {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookies: {
-        maxAge: 60000,
-      },
       store: sessionStore,
     }),
   );
