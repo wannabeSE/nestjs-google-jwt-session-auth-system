@@ -47,7 +47,7 @@ This projects provides jwt, session and google oauth authentication system.
 
 
 ## API Reference
-
+## Must Run on http://localhost:3000 
 #### To create new user
 ```http
   POST /api/v1/user/create-user
@@ -121,7 +121,7 @@ This projects provides jwt, session and google oauth authentication system.
 ```http
   GET /api/v1/auth/session/logout
 ```
-####To get all users
+#### To get all users
 ```http
   GET /api/v1/user/all
 ```
