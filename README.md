@@ -3,12 +3,11 @@
 </p>
 
 
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 This projects provides jwt, session and google oauth authentication system. 
-
+Developed using:
+  - NestJS
+  - MongoDB
 ## Installation
 
 ```bash
@@ -43,22 +42,19 @@ $ pnpm run test:cov
 
 # SAuth
 
-This projects provides jwt, session and google oauth authentication system. 
-
-
 ## API Reference
 ## Must Run on http://localhost:3000 
 #### To create new user
 ```http
   POST /api/v1/user/create-user
 ```
-
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `username` | `string` | **Required** |
 |`email`| `string`  | **Required**|
 |`password`| `string`| **Required**|
 
+returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 #### Sign In with Google [uses session log in]
 
 ```http
@@ -69,6 +65,7 @@ This projects provides jwt, session and google oauth authentication system.
 | :-------- | :------- | :-------------------------------- |
 | `google account`      | `google account` | **Required Google account**.|
 
+returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 #### Log In with Session
 ```http
   POST /api/v1/auth/session/login
@@ -77,6 +74,8 @@ This projects provides jwt, session and google oauth authentication system.
 | :-------- | :------- | :------------------------- |
 | `email` | `string` | **Required** |
 |`password`| `string`  | **Required**|
+
+returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 
 #### Log In with JWT
 ```http
@@ -87,20 +86,15 @@ This projects provides jwt, session and google oauth authentication system.
 | `email` | `string` | **Required** |
 |`password`| `string`  | **Required**|
 
-#### Log In with Session
-```http
-  GET /api/v1/auth/session/login
-```
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `email` | `string` | **Required** |
-|`password`| `string`  | **Required**|
+returns {access_token: efgtg5g352gh25gh5h5h5hh3, refresh_token: ghh7fdfsdfsdafsdavfhykjukgfh}
 
 #### To get info of logged in user [session expires in 1 day]
 ```http
   GET /api/v1/auth/session/profile
 ```
-#### To get info of logged in user [Token expires in 6h refresh token will be available for 24hrs].
+returns {userID: 90347805124095684, email: 'abc@xyz.com'}
+
+#### To get info of logged in user [Access Token expires in 6hrs, refresh token will be available for 24hrs].
 
 ```http
   POST /api/v1/auth/jwt/profile
@@ -109,6 +103,8 @@ This projects provides jwt, session and google oauth authentication system.
 | :-------- | :------- | :------------------------- |
 | `Authorization: Bearer <TOKEN>` | `string` | **Required** |
 
+returns {userID: 90347805124095684, email: 'abc@xyz.com'}
+
 #### To extend the time of previously assigned access token
 ```http
   POST /api/v1/auth/jwt/refresh-token
@@ -116,6 +112,10 @@ This projects provides jwt, session and google oauth authentication system.
  Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `refresh_token as Request Body` | `string` | **Required** |
+
+returns {access_token: jgsdggioergiohigoeoighorgh4pjfgl} 
+
+[only extends the expiration time. No user info is included]
 
 #### To log the user out
 ```http
@@ -128,5 +128,7 @@ This projects provides jwt, session and google oauth authentication system.
  Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `Authorization: Bearer <TOKEN>` | `string` | **Required** |
+
+returns [ {user_object}, {user_object} ]
 
 
