@@ -5,6 +5,7 @@
 
 ## Description
 This projects provides jwt, session and google oauth authentication system. 
+
 Developed using:
   - NestJS
   - MongoDB
@@ -72,8 +73,10 @@ returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 ```
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `email` | `string` | **Required** |
+| `username` | `string` | **Required** |
 |`password`| `string`  | **Required**|
+
+request body = {username: 'abc@gmail.com', password:'123456'} [username will be read as email]
 
 returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 
@@ -92,6 +95,10 @@ returns {access_token: efgtg5g352gh25gh5h5h5hh3, refresh_token: ghh7fdfsdfsdafsd
 ```http
   GET /api/v1/auth/session/profile
 ```
+ Parameter (Header) | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Cookie: connect.sid=78cfbbcub8298f9cen9c02ncie` | `string` | **Required** |
+
 returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 
 #### To get info of logged in user [Access Token expires in 6hrs, refresh token will be available for 24hrs].
@@ -99,7 +106,7 @@ returns {userID: 90347805124095684, email: 'abc@xyz.com'}
 ```http
   POST /api/v1/auth/jwt/profile
 ```
- Parameter | Type     | Description                |
+ Parameter (Header) | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `Authorization: Bearer <TOKEN>` | `string` | **Required** |
 
@@ -125,7 +132,7 @@ returns {access_token: jgsdggioergiohigoeoighorgh4pjfgl}
 ```http
   GET /api/v1/user/all
 ```
- Parameter | Type     | Description                |
+ Parameter (Header) | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `Authorization: Bearer <TOKEN>` | `string` | **Required** |
 

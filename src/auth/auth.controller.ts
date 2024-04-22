@@ -23,7 +23,8 @@ export class AuthController {
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
-  googleLoginRedirect(@Req() req: Request) {
+  googleLoginRedirect(@Req() req: Request, @Res() res: Response) {
+    res.redirect('http://localhost:3001/'); //* add your own frontend success redirect url
     return req.user;
   }
   @Get('session/profile')
@@ -68,7 +69,7 @@ export class AuthController {
   @Post('jwt/refresh-token')
   @UseGuards(RefreshTokenAuthGuard)
   async refreshToken(@Req() req: Request): Promise<Record<string, string>> {
-    const accessToken = this.authService.accessTokenGenerator(req.user);
-    return { accessToken };
+    const access_token = this.authService.accessTokenGenerator(req.user);
+    return { access_token };
   }
 }
